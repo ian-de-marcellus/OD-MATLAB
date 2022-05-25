@@ -24,6 +24,37 @@ classdef Hegselmann_Krause_Zealots_Model < Hegselmann_Krause_Model
         function data = get_data(self)
             data = self.simulation_data();
         end
+
+        function writeVideo(self, start_step, end_step)
+            %Write simulation
+            % Create .avi at given location with video of bar graph of
+            % simulation evolving over time
+
+            % TODO: validate start_step and end_step are integers, set up
+            % support for default arguments
+
+            v = VideoWriter(self.path + self.videoName);
+            % TODO: fix to support multiple formats
+            % v.FileFormat = self.videoFormat; 
+            v.FrameRate = self.frameRate;
+
+            open(v);
+
+            f = figure;
+            h = histogram(self.simulation_data(1,:), self.nbins);
+            h.Normalization = 'probability';
+            hold on;
+            z = histogram(self.zealot_opinions, self.nbins);
+            z.Normalization = 'probability';
+
+            for t = start_step:end_step
+                h.Data = self.simulation_data(t,:);
+                writeVideo(v,getframe(f));
+            end
+
+            close(v);
+
+        end
     end
 
     methods (Access = protected)

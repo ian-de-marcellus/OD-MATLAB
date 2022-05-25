@@ -10,6 +10,19 @@ classdef Hegselmann_Krause_Model < handle
 
         adjacency(:,:) % {mustBeA(adjacency,'logical')}  % original adjacency matrix
         original_opinions(1,:)  % original array matrix
+        
+        path = fullfile('.')  % path to save location for simulations
+    end
+
+    properties (Access = public)
+        % color map for displaying simulations
+        displayColors
+
+        % video settings
+        videoFormat = 'mp4'
+        videoName = 'output_media'
+        nbins = 20
+        frameRate = 2
     end
 
     properties (Access = protected)
@@ -60,6 +73,37 @@ classdef Hegselmann_Krause_Model < handle
         function data = get_data(self)
             data = self.simulation_data;
         end
+
+        function writeVideo(self, start_step, end_step)
+            %Write simulation
+            % Create .avi at given location with video of bar graph of
+            % simulation evolving over time
+
+            % TODO: validate start_step and end_step are integers, set up
+            % support for default arguments
+
+            v = VideoWriter(self.path + self.videoName);
+            % TODO: fix to support multiple formats
+            % v.FileFormat = self.videoFormat; 
+            v.FrameRate = self.frameRate;
+
+            open(v);
+
+            f = figure;
+            h = histogram(self.simulation_data(1,:), self.nbins);
+
+            for t = start_step:end_step
+                h.Data = self.simulation_data(t,:);
+                writeVideo(v,getframe(f));
+            end
+
+            close(v);
+
+        end
+
+        function setPath(self, path)
+            self.path = fullfile(path);
+        end
     end
 
     methods (Access = protected)
@@ -100,6 +144,7 @@ classdef Hegselmann_Krause_Model < handle
             % TODO: make it work without the "self"
             new_adj = old_adj + eye(size(old_adj));
         end
+
     end
 
 end

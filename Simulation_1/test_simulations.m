@@ -4,13 +4,13 @@ function test_simulations()
 
     close all;
 
-    bound = 0.2;
-    num_agents = 100;
-    num_zealots = 100;
+    bound = 0.3;
+    num_agents = 50;
+    num_zealots = 1;
     random = randi([0 1], num_agents, num_agents);
     agent_adjacency = abs(random - random');
-    num_steps_NZ = 60;
-    num_steps_Z = 300;
+    num_steps_NZ = 20;
+    num_steps_Z = 30;
 
     following = randi([0 1], num_zealots, num_agents);
 
@@ -61,6 +61,14 @@ function test_simulations()
     
     titletext = num_agents + " Agents, " + num_zealots + " Zealots, confidence bound: " + bound;
     sgtitle(titletext)
+
+    model.setPath("../../Simulation Videos/");
+    model.videoName = "zealot_sim";
+    model.writeVideo(1, model.time);
+
+    model2.setPath("../../Simulation Videos/");
+    model2.videoName = "no_zealot_sim";
+    model2.writeVideo(1, model2.time);
 
 end
 

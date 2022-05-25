@@ -4,22 +4,22 @@ function test_simulations()
 
     close all;
 
-    bound = 0.5;
-    num_agents = 60;
-    num_zealots = 5;
+    bound = 0.3;
+    num_agents = 50;
+    num_zealots = 100;
     random = randi([0 1], num_agents, num_agents);
-    agent_adjacency = abs(random - random')
-    num_steps_NZ = 50;
-    num_steps_Z = 500;
+    agent_adjacency = abs(random - random');
+    num_steps_NZ = 60;
+    num_steps_Z = 300;
 
-    following = randi([0 1], num_zealots, num_agents)
+    following = randi([0 1], num_zealots, num_agents);
 
-    agent_opinions = rand(1, num_agents)
-    zealot_opinions = rand(1, num_zealots)
+    agent_opinions = rand(1, num_agents);
+    zealot_opinions = rand(1, num_zealots);
 
     model = Hegselmann_Krause_Zealots_Model(bound, num_agents, num_zealots, agent_adjacency, following, agent_opinions, zealot_opinions);
 
-    zealot_opinions
+    zealot_opinions;
     model.simulate_steps(num_steps_Z);
     data = model.get_data();
 
@@ -27,18 +27,18 @@ function test_simulations()
 
     data = [data zealot_data_Z];
 
-    disp(data);
+    % disp(data);
 
     model2 = Hegselmann_Krause_Model(bound, num_agents, agent_adjacency, agent_opinions);
 
-    model2.simulate_steps(num_steps_NZ)
+    model2.simulate_steps(num_steps_NZ);
     data2 = model2.get_data();
 
     zealot_data_NZ = repmat(zealot_opinions, num_steps_NZ, 1);
 
     data2 = [data2 zealot_data_NZ];
 
-    disp(data2);
+    % disp(data2);
 
 
     subplot(2,2,1);
@@ -59,10 +59,13 @@ function test_simulations()
     imagesc(data',[0,1]);
     colorbar;
     
-    titletext = num_agents + " Agents, " + num_zealots + " Zealots, "
-    sgtitle()
+    titletext = num_agents + " Agents, " + num_zealots + " Zealots, confidence bound: " + bound;
+    sgtitle(titletext)
 
 end
+
+function writeVideo(data)
+
 
 function visualizeimage(simulation)
 map = [255 0 2

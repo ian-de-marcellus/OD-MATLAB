@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+duck --user "idemarcellus@g.hmc.edu" --upload "googledrive:/Shared with me/Ian de Marcellus/Code/" * -existing overwrite
