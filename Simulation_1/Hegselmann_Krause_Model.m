@@ -41,7 +41,7 @@ classdef Hegselmann_Krause_Model < handle
         function self = Hegselmann_Krause_Model(bound, num_agents, adjacency, opinions)
             %constructor
             %   all vectors should be given as row vectors
-            self.validate_input(adjacency,opinions); % TODO: fix
+            % self.validate_input(adjacency,opinions); % TODO: fix
 
             % set initial conditions
             self.c = bound;
@@ -102,6 +102,7 @@ classdef Hegselmann_Krause_Model < handle
         end
 
         function setPath(self, path)
+            %Set for where to save created media
             self.path = fullfile(path);
         end
     end
@@ -133,7 +134,7 @@ classdef Hegselmann_Krause_Model < handle
             dist = distance(self);
 
             self.dist_matr = dist;
-            self.ind_matr = dist <= self.c;
+            self.ind_matr = abs(dist) <= self.c;
         end
 
         function dist = distance(self)
@@ -142,6 +143,8 @@ classdef Hegselmann_Krause_Model < handle
 
         function new_adj = fix_adjacency(self, old_adj)
             % TODO: make it work without the "self"
+            % ensure that each node is considered to be adjacent to itself
+            % for the mathematical purposes of this calculation
             new_adj = old_adj + eye(size(old_adj));
         end
 

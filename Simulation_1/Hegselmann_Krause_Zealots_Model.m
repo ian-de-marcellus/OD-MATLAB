@@ -1,6 +1,7 @@
 classdef Hegselmann_Krause_Zealots_Model < Hegselmann_Krause_Model
-    %UNTITLED3 Summary of this class goes here
-    %   Detailed explanation goes here
+    %Hegselmann Krause model with zealots
+    %   Variation on HK model with zealots who can change the opinions of
+    %   others but their own opinions can't be changed
 
     properties (GetAccess = public, SetAccess = protected)
         n_zealots {mustBePositive, mustBeInteger}  % number of zealots

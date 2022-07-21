@@ -4,9 +4,9 @@ function test_simulations()
 
     close all;
 
-    bound = 0.3;
-    num_agents = 50;
-    num_zealots = 1;
+    bound = 0.1;
+    num_agents = 30;
+    num_zealots = 30;
     random = randi([0 1], num_agents, num_agents);
     agent_adjacency = abs(random - random');
     num_steps_NZ = 20;
@@ -17,9 +17,24 @@ function test_simulations()
     agent_opinions = rand(1, num_agents);
     zealot_opinions = rand(1, num_zealots);
 
+    % Discrete agents (w zealots), continuous time
+
+    continuous_timestep = 0.1;
+    num_steps_Z_cont = num_steps_Z/continuous_timestep;
+    modelC = HK_Zealots_Discrete_Agent_Cont_Time(bound, num_agents, num_zealots, agent_adjacency, following, agent_opinions, zealot_opinions, continuous_timestep);
+
+    modelC.simulate_steps(num_steps_Z_cont);
+    dataC = modelC.get_data();
+
+    zealot_data_ZC = repmat(zealot_opinions, num_steps_Z_cont, 1);
+
+    dataC = [dataC zealot_data_ZC];
+
+
+    % Discrete agents (w zealots), discrete time
+
     model = Hegselmann_Krause_Zealots_Model(bound, num_agents, num_zealots, agent_adjacency, following, agent_opinions, zealot_opinions);
 
-    zealot_opinions;
     model.simulate_steps(num_steps_Z);
     data = model.get_data();
 
@@ -28,47 +43,85 @@ function test_simulations()
     data = [data zealot_data_Z];
 
     % disp(data);
-
-    model2 = Hegselmann_Krause_Model(bound, num_agents, agent_adjacency, agent_opinions);
-
-    model2.simulate_steps(num_steps_NZ);
-    data2 = model2.get_data();
-
-    zealot_data_NZ = repmat(zealot_opinions, num_steps_NZ, 1);
-
-    data2 = [data2 zealot_data_NZ];
+%     bound2 = [repelem(bound, num_agents), repelem(0, num_zealots)];
+%     num_total = num_agents+num_zealots;
+%     tot_adjacency = [agent_adjacency; following];
+%     tot_opinions = [agent_opinions, zealot_opinions];
+% 
+%     model2 = Hegselmann_Krause_Model_Hetero(bound2, num_total, tot_adjacency, tot_opinions);
+% 
+%     model2.simulate_steps(num_steps_NZ);
+%     data2 = model2.get_data();
+% 
+%     zealot_data_NZ = repmat(zealot_opinions, num_steps_NZ, 1);
+% 
+%     data2 = [data2 zealot_data_NZ];
 
     % disp(data2);
 
 
+%     subplot(2,2,1);
+%     title('With No Zealots Histogram')
+%     bar(data2);
+% 
+%     subplot(2,2,2);
+%     title('Individual Opinion As Rows Over Time No Zealots')
+%     imagesc(data2',[0,1]);
+%     colorbar;
+% 
+%     subplot(2,2,3);
+%     title('With Zealots Histogram')
+%     bar(data);
+% 
+%     subplot(2,2,4);
+%     title('Individual Opinion As Rows Over Time With Zealots')
+%     imagesc(data',[0,1]);
+%     colorbar;
+%     
+%     titletext = num_agents + " Agents, " + num_zealots + " Zealots, confidence bound: " + bound;
+%     sgtitle(titletext)
+% 
+%     model.setPath("../../Simulation Videos/");
+%     model.videoName = "zealot_sim";
+%     model.writeVideo(1, model.time);
+% 
+%     model2.setPath("../../Simulation Videos/");
+%     model2.videoName = "no_zealot_sim";
+%     model2.writeVideo(1, model2.time);
+
+
+
+
     subplot(2,2,1);
-    title('With No Zealots Histogram')
-    bar(data2);
+    title('Continuous Time Histogram')
+    bar(dataC);
 
     subplot(2,2,2);
-    title('Individual Opinion As Rows Over Time No Zealots')
-    imagesc(data2',[0,1]);
+    title('Individual Opinion As Rows Over Continuous Time')
+    imagesc(dataC',[0,1]);
     colorbar;
 
     subplot(2,2,3);
-    title('With Zealots Histogram')
+    title('Discrete Time Histogram')
     bar(data);
 
     subplot(2,2,4);
-    title('Individual Opinion As Rows Over Time With Zealots')
+    title('Individual Opinion As Rows Over Discrete Time')
     imagesc(data',[0,1]);
     colorbar;
     
     titletext = num_agents + " Agents, " + num_zealots + " Zealots, confidence bound: " + bound;
     sgtitle(titletext)
 
+    modelC.setPath("../../Simulation Videos/");
+    modelC.videoName = "cont_z_time_sim";
+    modelC.writeVideo(1, (modelC.time-1)/continuous_timestep);
+
     model.setPath("../../Simulation Videos/");
-    model.videoName = "zealot_sim";
+    model.videoName = "disc_time_z_sim";
     model.writeVideo(1, model.time);
 
-    model2.setPath("../../Simulation Videos/");
-    model2.videoName = "no_zealot_sim";
-    model2.writeVideo(1, model2.time);
+
 
 end
 
