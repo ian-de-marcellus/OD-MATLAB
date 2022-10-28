@@ -1,4 +1,4 @@
-classdef HK_Zealots_Discrete_Agent_Cont_Time < Hegselmann_Krause_Zealots_Model
+classdef HKModelContTimeDiscAgentsWithZealots < HKModelDiscTimeDiscAgentsWithZealots
     %Hegselmann Krause model with zealots
     %   Variation on HK model with zealots who can change the opinions of
     %   others but their own opinions can't be changed
@@ -10,8 +10,8 @@ classdef HK_Zealots_Discrete_Agent_Cont_Time < Hegselmann_Krause_Zealots_Model
     end
 
     methods (Access = public)
-        function self = HK_Zealots_Discrete_Agent_Cont_Time(bound, num_agents, num_zealots, agent_adjacency, following, agent_opinions, zealot_opinions, timestep)
-            self@Hegselmann_Krause_Zealots_Model(bound, num_agents, num_zealots, agent_adjacency, following, agent_opinions, zealot_opinions);
+        function self = HKModelContTimeDiscAgentsWithZealots(bound, num_agents, num_zealots, agent_adjacency, following, agent_opinions, zealot_opinions, timestep)
+            self@HKModelDiscTimeDiscAgentsWithZealots(bound, num_agents, num_zealots, agent_adjacency, following, agent_opinions, zealot_opinions);
             self.timestep = timestep;
         end
     end

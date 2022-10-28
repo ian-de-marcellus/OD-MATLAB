@@ -1,7 +1,7 @@
-classdef Hegselmann_Krause_Zealots_Model < Hegselmann_Krause_Model
-    %Hegselmann Krause model with zealots
-    %   Variation on HK model with zealots who can change the opinions of
-    %   others but their own opinions can't be changed
+classdef HKModelDiscTimeDiscAgentsWithZealots < HKModelDiscTimeDiscAgentsWithZealots
+    % Hegselmann Krause model with zealots
+    % Variation on HK model with zealots who can change the opinions of
+    % others but their own opinions can't be changed
 
     properties (GetAccess = public, SetAccess = protected)
         n_zealots {mustBePositive, mustBeInteger}  % number of zealots
@@ -12,11 +12,11 @@ classdef Hegselmann_Krause_Zealots_Model < Hegselmann_Krause_Model
     end
 
     methods (Access = public)
-        function self = Hegselmann_Krause_Zealots_Model(bound, num_agents, num_zealots, agent_adjacency, following, agent_opinions, zealot_opinions)
+        function self = HKModelDiscTimeDiscAgentsWithZealots(bound, num_agents, num_zealots, agent_adjacency, following, agent_opinions, zealot_opinions)
             adjacency = [agent_adjacency; following];
             opinions = agent_opinions;
 
-            self@Hegselmann_Krause_Model(bound, num_agents+num_zealots, adjacency, opinions);
+            self@HKModelDiscTimeDiscAgentsWithZealots(bound, num_agents+num_zealots, adjacency, opinions);
 
             self.n_zealots = num_zealots;
             self.zealot_opinions = zealot_opinions;

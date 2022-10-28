@@ -1,12 +1,12 @@
-function test_simulations()
+function testsimulations()
 %UNTITLED6 Summary of this function goes here
 %   Detailed explanation goes here
 
     close all;
 
-    bound = 0.1;
-    num_agents = 30;
-    num_zealots = 30;
+    bound = 0.3;
+    num_agents = 5;
+    num_zealots = 5;
     random = randi([0 1], num_agents, num_agents);
     agent_adjacency = abs(random - random');
     num_steps_NZ = 20;

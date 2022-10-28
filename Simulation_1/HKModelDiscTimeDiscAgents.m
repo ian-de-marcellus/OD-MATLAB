@@ -1,14 +1,21 @@
-classdef Hegselmann_Krause_Model < handle
-    %Base Hegselmann-Krause model
-    %   acts as superclass for other models
+classdef HKModelDiscTimeDiscAgents < handle
+    % Base Hegselmann-Krause model
+    % This model simulates interactions between n_agents agents, who
+    % mutually affect each other based on adjacent, an adjacency matrix,
+    % with all agents adjusting their opinions at each timestep using a
+    % homogeneous bounded confidence function with bound c.
+    %
+    % Acts as superclass for other models
     properties (SetAccess = protected, GetAccess = public)
-        time = 1  % time starts at 1 cuz 1-indexing
-        timestep = 1
+        iTime = 1  % time starts at 1 because of 1-indexing
+        timestep = 1  % time increase per update
 
-        n_agents {mustBePositive, mustBeInteger}  % number of agents
+        nAgents {mustBePositive, mustBeInteger}  % number of agents
         c {mustBeNonnegative}  % confidence bound
 
-        adjacency(:,:) % {mustBeA(adjacency,'logical')}  % original adjacency matrix
+        % adjacencyMatrix- 
+
+        adjacencyMatrix(:,:) % {mustBeA(adjacency,'logical')}  % original adjacency matrix
         original_opinions(1,:)  % original array matrix
         
         path = fullfile('.')  % path to save location for simulations
@@ -38,15 +45,15 @@ classdef Hegselmann_Krause_Model < handle
     end
 
     methods (Access = public)
-        function self = Hegselmann_Krause_Model(bound, num_agents, adjacency, opinions)
-            %constructor
-            %   all vectors should be given as row vectors
+        function self = HKModelDiscTimeDiscAgents(bound, num_agents, adjacency, opinions)
+            % HEGSELMANNKRAUSEMODEL
+            % all vectors should be given as row vectors
             % self.validate_input(adjacency,opinions); % TODO: fix
 
             % set initial conditions
             self.c = bound;
-            self.n_agents = num_agents;
-            self.adjacency = adjacency;
+            self.nAgents = num_agents;
+            self.adjacencyMatrix = adjacency;
             self.adj_agents_matr = self.fix_adjacency(adjacency);
             
             % opinions at t=0
@@ -120,7 +127,7 @@ classdef Hegselmann_Krause_Model < handle
             % sum over columns (return row vector)
             new_opinions = (old_opinions*influence_matrix)./sum(influence_matrix);
 
-            self.time = self.time + self.timestep;
+            self.iTime = self.iTime + self.timestep;
         end
 
         function validate_input(self, adjacency, opinions)
