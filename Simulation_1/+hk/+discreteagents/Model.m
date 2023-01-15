@@ -42,12 +42,13 @@ classdef (Abstract) Model < hk.Model
 
     properties (Abstract, Access = protected)
         % ENFORCESELFADJACENCY - enforce all 1s on main diagonal of adjacency
-        % Subclasses should set true by default
+        % All subclasses should set true unless they have reason to do
+        % otherwise
         enforceSelfAdjacency
     end
 
     methods
-        function self = Model(opinionArray, adjacencyMatrix, bound, timestep)
+        function self = Model(adjacencyMatrix, opinionArray, bound, timestep)
             % DISCRETEAGENTS - Abstract class: HKModel with discrete agents
 
             % validate input
@@ -65,6 +66,9 @@ classdef (Abstract) Model < hk.Model
             self.initialAdjacencyMatrix = adjacencyMatrix;
             self.nAgents = length(opinionArray);
 
+            % If enabled, make each adjacent adjacent to itself regardless
+            % of input matrix (differing from traditional adjacency
+            % matrices)
             if (self.enforceSelfAdjacency)
                 self.adjacencyMatrix = hk.Statics.forceselfadjacency(adjacencyMatrix);
             else
@@ -80,6 +84,14 @@ classdef (Abstract) Model < hk.Model
             % Each column corresponds to a different timestep
             data = self.simulationDataMatrix;
         end
+
+        function img = adjacencyGraph(self)
+            img = figure;
+            adjGraph = graph(self.initialAdjacencyMatrix);
+            %%% TODO
+        end
+
+
     end
 
 %     methods(Access = public)
@@ -105,14 +117,14 @@ classdef (Abstract) Model < hk.Model
     methods (Access = protected)
         function diff = lastopiniondifferential(self)
             % LASTOPINIONDIFFERENTIAL - error estimate
-            % Sum of (absolute) differences in opinions between the current timestep
-            % and the previous timestep
+            % Return largest (absolute) difference in opinions between
+            % the current timestep and the previous timestep
             if (self.frame == 1)
                 % if frame is 1, there's no last step to compare to
                 diff = NaN;
             else
                 opinions = self.simulationDataMatrix;
-                diff = sum(abs(opinions(:, self.frame)-opinions(:, self.frame-1)));
+                diff = max(abs(opinions(:, self.frame)-opinions(:, self.frame-1)));
             end
         end
     end

@@ -7,21 +7,17 @@ classdef ZealotModel < hk.discreteagents.discretetime.Model
     end
 
     methods
-        function self = ZealotModel(persuadableOpinionArray, zealotOpinionArray, persuadableAdjacencyMatrix, zealotFollowingMatrix, bound, timestep)
-            %UNTITLED2 Construct an instance of this class
+        function self = ZealotModel(adjacencyMatrix, opinionArray, zealotIDArray, ...
+                persuadableBound, timestep)
+            % ZEALOTMODEL - Build opinion dynamics model with zealots and
+            % homogeneous persuadable agents
             %   Detailed explanation goes here
-            nZealots = length(zealotOpinionArray);
-            nPersuadables = length(persuadableOpinionArray);
 
-            opinionArray = cat(1,persuadableOpinionArray,zealotOpinionArray);
+            % If agent is a zealot, their confidence bound is 0.
+            % If agent is persuadable, their confidence bound is given.
+            bound = (1-zealotIDArray) * persuadableBound;
 
-            adjacencyMatrix = [persuadableAdjacencyMatrix zealotFollowingMatrix];
-            adjacencyMatrix = [adjacencyMatrix, zeros(nZealots, nPersuadables+nZealots)];
-
-            self@hk.discreteagents.discretetime.Model(opinionArray,adjacencyMatrix,bound,timestep);
-
-            self.nZealots = length(zealotOpinionArray);
-            self.nPersuadables = length(persuadableOpinionArray);
+            self@hk.discreteagents.discretetime.Model(adjacencyMatrix,opinionArray,bound,timestep);
         end
     end
 end

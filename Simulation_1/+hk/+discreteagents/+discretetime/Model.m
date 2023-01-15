@@ -9,6 +9,8 @@ classdef Model < hk.discreteagents.Model
     
     methods
         function step(self)
+            % STEP - evolve simulation one timestep
+            
             self.frame = self.frame + 1;
 
             opinions = self.currentOpinionArray;
@@ -28,15 +30,19 @@ classdef Model < hk.discreteagents.Model
             self.time = self.time + self.timestep;
         end
 
-        function self = Model(opinionArray, adjacencyMatrix, bound, timestep)
+        function self = Model(adjacencyMatrix, opinionArray, bound, timestep)
             % MODEL - HK model with discrete agents, discrete time
             % Uses heterogeneous confidence bound, is superclass to homogeneous and
             % zealot models
-            self@hk.discreteagents.Model(opinionArray, ...
-                adjacencyMatrix, bound, timestep);
+            self@hk.discreteagents.Model(adjacencyMatrix, opinionArray, ...
+                bound, timestep);
         end
         
         function img = plot(self, varargin)
+            % PLOT - plot this model
+            % Currently returns a figure showing the distribution over time
+            % and the distribution on the last timestep (the steady-state
+            % distribution if run to equilibrium)
             img = figure;
             tiledlayout(2,1);
             
@@ -49,8 +55,33 @@ classdef Model < hk.discreteagents.Model
             nexttile
             histogram(self.currentOpinionArray, ceil(sqrt(self.nAgents)))
             title('Last Step Histogram')
+
+            % TODO:
+            % last step histogram
+            % simulation information
+            % adjacency imagesc
+            % opinions over time
+            % histogram video
+            % graph over time of average opinion w SD error bars for each
+            % maybe image over time of adjacency matrix except at each
+            % timestep, the row corresponding to any given agent is the
+            % color of that agent's opinion IN ONLY THE COLUMNS THAT ARE
+            % TRUE IN THE ADJACENCY MATRIX (so looking down each column, we
+            % see the opinion of each agent potentially influencing that agent during
+            % that timestep)
+            % block
+            % ALSO IMPLEMENT FOR ZEALOT (in testsimulations2 write code
+            % that compares the two
         end
 
+        function img = laststephistogram(self)
+            % LASTSTEPHISTOGRAM - plot agent ending opinion histogram
+            % Plot a histogram with the agents opinions on the last step
+            % simulated
+            img = figure;
+            histogram(self.currentOpinionArray, ceil(sqrt(self.nAgents)))
+            title('Last Step Histogram')
+        end
     end
 
     methods (Static, Access = protected)

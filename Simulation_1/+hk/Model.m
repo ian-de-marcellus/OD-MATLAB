@@ -24,6 +24,7 @@ classdef (Abstract) Model < handle
     end
 
     methods (Abstract, Access = public)
+        % abstract methods to be implemented by subclasses
         data = getdata(self)
         img = plot(self, varargin)
 
@@ -55,6 +56,8 @@ classdef (Abstract) Model < handle
         end
 
         function simulateconvergence(self, tolerance, maxIter)
+            % SIMULATECONVERGENCE - Evolve simulation until either reaching
+            % the maximum number of iterations or until 
             self.step();
             i = 1;
 
