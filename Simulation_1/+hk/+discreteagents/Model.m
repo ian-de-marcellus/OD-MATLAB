@@ -1,5 +1,21 @@
 classdef (Abstract) Model < hk.Model
     % MODEL - HK Model with discrete agents superclass
+    %
+    % public/protected function implementations:
+    %   -   hk.discreteagents.Model(adjacencyMatrix, opinionArray, bound,
+    %           timestep)
+    %   -   getdata(self)
+    %   -   adjacencygraph(self)
+    %   -   lastopiniondifferential(self)
+    %
+    % public/protected variable implementations:
+    %   -   nAgents
+    %   -   initialOpinionArray
+    %   -   initialAdjacencyMatrix
+    %   -   bound
+    %   -   adjacencyMatrix
+    %   -   currentOpinionArray
+    %   -   simulationDataMatrix
 
     properties (SetAccess = protected, GetAccess = public)
         % NAGENTS - total number of agents
@@ -85,7 +101,7 @@ classdef (Abstract) Model < hk.Model
             data = self.simulationDataMatrix;
         end
 
-        function img = adjacencyGraph(self)
+        function img = adjacencygraph(self)
             img = figure;
             adjGraph = graph(self.initialAdjacencyMatrix);
             %%% TODO
@@ -93,22 +109,6 @@ classdef (Abstract) Model < hk.Model
 
 
     end
-
-%     methods(Access = public)
-%         function outputMatrix = forceselfadjacency(inputMatrix)
-%             % FORCESELFADJACENCY - sets main diagonal to 1s
-%             % Takes in matrix, sets main diagonal to 1s regardless of
-%             % previous values
-%             initialMainDiagonal = diag(inputMatrix);
-%             outputMatrix = inputMatrix - initialMainDiagonal + eye(size(inputMatrix));
-%         end
-% 
-%         function distMatr = distanceMatrix(array)
-%             % DISTANCE finds pairwise distances between array values
-%             % uses .' to transpose the opinion array
-%             distMatr = abs(array - array.');
-%         end
-%     end
 
     methods (Abstract, Access = protected)
         newOpinions = updateopinions(oldOpinions, influenceMatrix)

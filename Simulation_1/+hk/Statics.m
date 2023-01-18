@@ -3,6 +3,16 @@ classdef (Abstract) Statics
     % DEPENDENCY for stochasticblockadjacency: STATISTICS AND MACHINE LEARNING TOOLBOX
     %   Generating opinion arrays from distributions will not work without
     %   this toolbox installed.
+    %
+    % public/protected function implementations:
+    %   -   forceselfadjacency(inputMatrix)
+    %   -   distancematrix(array)
+    %   -   zealotinput(persuadableOpinionArray, zealotOpinionArray,
+    %           persuadableAdjacencyMatrix, zealotFollowingMatrix)
+    %   -   gnpadjacency(nAgents, probability, opinionDistribution)
+    %   -   stochasticblockadjacency(blocks, offDiagonal, opinionDistribution)
+    %
+    % public/protected variable implementations:
 
     methods (Static, Access = public)
         function outputMatrix = forceselfadjacency(inputMatrix)
@@ -13,13 +23,13 @@ classdef (Abstract) Statics
             outputMatrix = inputMatrix - diag(initialMainDiagonal) + eye(size(inputMatrix));
         end
 
-        function distMatr = distanceMatrix(array)
+        function distMatr = distancematrix(array)
             % DISTANCE - finds pairwise distances between array values
             % uses .' to transpose the opinion array
             distMatr = abs(array - array.');
         end
 
-        function [adjacencyMatrix, opinionArray, zealotIDArray] = zealotInput( ...
+        function [adjacencyMatrix, opinionArray, zealotIDArray] = zealotinput( ...
                 persuadableOpinionArray, zealotOpinionArray, persuadableAdjacencyMatrix, zealotFollowingMatrix)
             % ZEALOTINPUT - combines separate persuadable and zealot inputs
             % TODO

@@ -2,6 +2,17 @@ classdef Model < hk.discreteagents.Model
     % MODEL - HK model with discrete agents, discrete time
     % Uses heterogeneous confidence bound, is superclass to homogeneous and
     % zealot models
+    %
+    % public/protected function implementations:
+    %   -   hk.discreteagents.discretetime.Model(adjacencyMatrix,
+    %           opinionArray, bound, timestep)
+    %   -   step(self)
+    %   -   plot(self, varargin)
+    %   -   laststephistogram(self)
+    %   -   updateopinions(oldOpinions, influenceMatrix)
+    %
+    % public/protected variable implementations:
+    %   -   enforceSelfAdjacency
 
     properties (Access = protected)
         enforceSelfAdjacency = true;
@@ -14,7 +25,7 @@ classdef Model < hk.discreteagents.Model
             self.frame = self.frame + 1;
 
             opinions = self.currentOpinionArray;
-            distanceMatrix = hk.Statics.distanceMatrix(opinions);
+            distanceMatrix = hk.Statics.distancematrix(opinions);
 
             % INDICATORMATRIX - true/false matrix based on whether one
             % agent is close enough to influence another
@@ -69,9 +80,8 @@ classdef Model < hk.discreteagents.Model
             % TRUE IN THE ADJACENCY MATRIX (so looking down each column, we
             % see the opinion of each agent potentially influencing that agent during
             % that timestep)
-            % block
-            % ALSO IMPLEMENT FOR ZEALOT (in testsimulations2 write code
-            % that compares the two
+            % ALSO IMPLEMENT FOR ZEALOT (in simulationexample.m write code
+            % that compares the two)
         end
 
         function img = laststephistogram(self)

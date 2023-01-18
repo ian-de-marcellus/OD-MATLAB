@@ -3,9 +3,24 @@ classdef (Abstract) Model < handle
     % Abstract superclass for all HK bounded confidence models, including
     % continuous and discrete time, agent-based and density-based, and
     % homogeneous / heterogeneous / zealot confidence bounds
+    %
+    % public/protected function implementations:
+    %   -   hk.Model(timestep)
+    %   -   setpath(self, path)
+    %   -   simulatesteps(self, steps)
+    %   -   simulateduration(self, duration)
+    %   -   simulateconvergence(self, tolerance, maxIter)
+    %
+    % public/protected variable implementations:
+    %   -   time
+    %   -   frame
+    %   -   timestep
+    %   -   path
     
     properties (SetAccess = protected, GetAccess = public)
         time = 0
+
+        % number of current frame to simulate
         frame {mustBePositive,mustBeInteger}
 
         % TIMESTEP - increase in time per update iteration
